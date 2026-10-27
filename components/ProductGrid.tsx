@@ -6,6 +6,8 @@ interface ProductGridProps {
   isLoading: boolean;
   error: Error | null;
   onRetry: () => void;
+  wishlist: number[];
+  onToggleWishlist: (id: number) => void;
 }
 
 export default function ProductGrid({
@@ -13,6 +15,8 @@ export default function ProductGrid({
   isLoading,
   error,
   onRetry,
+  wishlist,
+  onToggleWishlist,
 }: ProductGridProps) {
   if (isLoading) {
     return (
@@ -37,9 +41,7 @@ export default function ProductGrid({
       <div className="rounded-lg border border-gray-200 p-8 text-center">
         <h3 className="font-semibold">Could not load products</h3>
 
-        <p className="mt-2 text-sm text-gray-600">
-          {error.message}
-        </p>
+        <p className="mt-2 text-sm text-gray-600">{error.message}</p>
 
         <button
           type="button"
@@ -67,7 +69,12 @@ export default function ProductGrid({
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          isWishlisted={wishlist.includes(product.id)}
+          onToggleWishlist={() => onToggleWishlist(product.id)}
+        />
       ))}
     </div>
   );
